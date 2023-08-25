@@ -1,6 +1,7 @@
 const User = require('../modeles/userModel');
 
 const createUser = async (req, res) => {
+  // console.log('Received form data:', req.body);
     try {
       const checkUsernameUnicity = await User.findByUsername(req.body.username);
       if (checkUsernameUnicity) {
@@ -11,6 +12,8 @@ const createUser = async (req, res) => {
       if (checkEmailUnicity) {
         return res.status(401).json({ message: 'Email address already taken' });
       }
+      console.log('req.body:', req.body);
+      console.log('req.query:', req.query);
   
       await User.create(req.body);
       return res.sendStatus(201);

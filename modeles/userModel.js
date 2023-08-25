@@ -3,13 +3,13 @@ const pool = require('../config/db');
 
 class User {
     // constructor(user) {
-    //     this.restaurantName = user.restaurantName;
+    //     this.restaurant_name = user.restaurant_name;
     //     this.username = user.username;
     //     this.email = user.email;
     //     this.mdp = user.mdp;
     //     this.adresse = user.adresse;
     //     this.ville = user.ville;
-    //     this.codePostal = user.codePostal;
+    //     this.code_postal = user.code_postal;
     //     this.image = user.image;
     // }
 
