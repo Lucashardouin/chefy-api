@@ -1,25 +1,26 @@
 const User = require('../modeles/userModel');
 
-const createUser = async (req, res) => {
+const createUser = async (newUser) => {
   // console.log('Received form data:', req.body);
     try {
-      const checkUsernameUnicity = await User.findByUsername(req.body.username);
+      const checkUsernameUnicity = await User.findByUsername(newUser.username);
       if (checkUsernameUnicity) {
-        return res.status(401).json({ message: 'Username already taken' });
+        throw new Error('Username already taken');
       }
   
-      const checkEmailUnicity = await User.findByEmail(req.body.email);
+      const checkEmailUnicity = await User.findByEmail(newUser.email);
       if (checkEmailUnicity) {
-        return res.status(401).json({ message: 'Email address already taken' });
+        throw new Error('Email already taken');
       }
-      console.log('req.body:', req.body);
-      console.log('req.query:', req.query);
+      // console.log('req.body:', req.body);
+      // console.log('req.query:', req.query);
   
-      await User.create(req.body);
-      return res.sendStatus(201);
+      await User.create(newUser);
+      return;
     } catch (error) {
       console.error(error);
-      res.sendStatus(500);
+      // newUser.sendStatus(500);
+      throw new Error(error);
     }
   };
   

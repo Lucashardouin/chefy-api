@@ -38,7 +38,7 @@ app.post('/api/users/', upload.single('image'), async (req, res) => {
       restaurant_name: req.body.restaurant_name,
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      mdp: req.body.mdp,
       adresse: req.body.adresse,
       ville: req.body.ville,
       code_postal: req.body.code_postal,
@@ -60,6 +60,28 @@ app.post('/api/users/', upload.single('image'), async (req, res) => {
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
+// app.post('/api/auth/login', async (req, res) => {
+//   try {
+//     const { email, mdp } = req.body;
+
+//     // Utilisez la fonction UserController.authenticateUser pour vérifier les informations de connexion
+//     const user = await UserController.authenticateUser(email, mdp);
+
+//     if (!user) {
+//       return res.status(401).json({ message: 'Invalid credentials' });
+//     }
+
+//     // Générez un jeton d'accès pour l'utilisateur authentifié
+//     const accessToken = generateAccessToken(user);
+
+//     // Envoyez le jeton d'accès en réponse
+//     res.status(200).json({ message: 'Login successful', accessToken });
+//   } catch (error) {
+//     console.error('Error during login:', error);
+//     res.status(500).json({ message: 'Error during login', error: error.message });
+//   }
+// });
+
 app.use(errorHandler);
 
 
