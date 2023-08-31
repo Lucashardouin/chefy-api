@@ -1,30 +1,20 @@
 require('dotenv').config();
+const { constants } = require("../constants");
 const bcrypt = require('bcrypt');
 
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS);
 
-const hashPassword = (req, res, next) => {
-  const { mdp } = req.body;
-
+const hashPassword = async (req, res, next) => {
+  const { mdp } = req.body
   if (mdp) {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error occured during password hash.' });
-      }
-
-      bcrypt.hash(mdp, salt, (err, hash) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error occured during password hash.' });
-        }
-
-        req.body.mdp = hash;
-
-        next();
-      });
-    });
+    // return await bcrypt.hash(mdp, saltRounds); // https://www.npmjs.com/package/bcrypt
+    req.body.mdp = await bcrypt.hash(mdp, saltRounds);
+    next()
   } else {
-    next();
+    // throw new Error('Error occurred during password hash')
+    res.send('Password field is empty').status(500);
   }
 };
 
 module.exports = hashPassword;
+

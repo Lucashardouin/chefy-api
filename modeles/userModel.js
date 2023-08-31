@@ -2,16 +2,6 @@ const mariadb = require('mariadb');
 const pool = require('../config/db');
 
 class User {
-    // constructor(user) {
-    //     this.restaurant_name = user.restaurant_name;
-    //     this.username = user.username;
-    //     this.email = user.email;
-    //     this.mdp = user.mdp;
-    //     this.adresse = user.adresse;
-    //     this.ville = user.ville;
-    //     this.code_postal = user.code_postal;
-    //     this.image = user.image;
-    // }
 
     static async create(newUser){
         try{

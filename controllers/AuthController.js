@@ -3,46 +3,28 @@ const jwt = require('jsonwebtoken');
 const User = require('../modeles/userModel');
 require('dotenv').config();
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
+  const user = {
+    username: req.body.username,
+    mdp: req.body.mdp,
+  };
   try {
-    const user = await User.findByUsername(req.body.username);
-    if (!user) {
-      return res.status(401).json({ message: 'Username not found' });
+    const userFromDB = await User.findByUsername(user.username);
+    if (!userFromDB) {
+      throw new Error("Username not found");
     } else {
-      // console.log(user);
-      const passwordCheck = await bcrypt.compare(req.body.mdp, user.mdp);
+      const passwordCheck = await bcrypt.compare(user.mdp, userFromDB.mdp);
       if (!passwordCheck) {
-        res.status(401).json({ message: 'Invalid credentials' });
+        throw new Error("Invalid credentials");
       } else {
-        const token = jwt.sign(
-          {
-            id_user: user.id_user,
-            username: user.username,
-            role: user.role
-          },
-          process.env.JWT_SECRET_KEY,
-          {
-            expiresIn: parseInt(process.env.JWT_EXPIRATION)
-          }
-        );
-
-        // Stocker le token dans un cookie sécurisé et HTTPOnly
-        return res
-          .cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: parseInt(process.env.JWT_COOKIE_EXPIRATION)
-          })
-          .status(200)
-          .json({
-            message: 'Authenticated'
-          });
+        const token = createJwtToken(user)
+        console.log('login succesful');
+        return res.status(200).send({ token });
       }
     }
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Error during login', error: error.message });
   }
 };
 
@@ -57,6 +39,22 @@ const getTokenData = (req, res) => {
     role: req.user.role
   });
 };
+
+const createJwtToken = (user) => {
+  return jwt.sign(
+    {
+      id_user: user.id_user,
+      username: user.username,
+      role: user.role
+    },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: parseInt(process.env.JWT_EXPIRATION)
+    }
+  );
+}
+
+
 
 module.exports = {
   login,

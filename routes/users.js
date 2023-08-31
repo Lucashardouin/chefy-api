@@ -2,6 +2,9 @@
 const router = require('express').Router();
 
 // Middlewares
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Utilisez memoryStorage pour stocker l'image en mémoire
+const upload = multer({ storage });
 const trimmer = require('../middlewares/trimmer');
 const sanitizer = require('../middlewares/sanitizer');
 const hashPassword = require('../middlewares/hashPassword');
@@ -10,10 +13,10 @@ const { userAuthorization } = require('../middlewares/authorization');
 const { validateUser } = require('../middlewares/validations/userValidation');
 
 // Contrôleur
-const UserController = require('../controllers/userController');
+const UserController = require('../controllers/UserController');
 
 // CREATE
-router.post('/', trimmer, validateUser, sanitizer, hashPassword, UserController.createUser);
+router.post('/', upload.single('image'), trimmer, validateUser, sanitizer, hashPassword, UserController.createUser);
 
 // READ
 router.get('/', UserController.getUsers);
@@ -32,6 +35,6 @@ router.put(
 );
 
 // DELETE
-router.delete('/:id', authentication, userAuthorization, UserController.deleteUser);
+// router.delete('/:id', authentication, userAuthorization, UserController.deleteUser);
 
 module.exports = router;
