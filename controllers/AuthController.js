@@ -17,6 +17,8 @@ const login = async (req, res, next) => {
       if (!passwordCheck) {
         throw new Error("Invalid credentials");
       } else {
+        user.role = userFromDB.role
+        user.id_user = userFromDB.id_user
         const token = createJwtToken(user)
         console.log('login succesful');
         return res.status(200).send({ token });
@@ -29,7 +31,9 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  return res.clearCookie('token').status(200).json({ message: 'Logout' });
+  axios.defaults.headers.common['Authorization'] = '';
+  localStorage.removeItem('token');
+  // return res.clearCookie('token').status(200).json({ message: 'Logout' });
 };
 
 const getTokenData = (req, res) => {
@@ -53,8 +57,6 @@ const createJwtToken = (user) => {
     }
   );
 }
-
-
 
 module.exports = {
   login,

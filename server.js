@@ -1,9 +1,6 @@
 // Importer les modules
 const express = require('express');
 const dotenv = require('dotenv').config();
-const multer = require('multer');
-const storage = multer.memoryStorage(); // Utilisez memoryStorage pour stocker l'image en mémoire
-const upload = multer({ storage });
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./middlewares/errorHandler');
@@ -23,12 +20,12 @@ app.use(bodyParser.json());
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/category", require("./routes/category"));
+app.use("/api/article", require("./routes/article"));
 
 // Définir une route de test
 app.get('/api/test', (req, res) => {
   res.status(200).json({ message: 'Backend works!' });
 });
-
 
 app.use(errorHandler);
 app.listen(port, () => {

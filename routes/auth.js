@@ -12,5 +12,6 @@ const AuthController = require('../controllers/AuthController');
 router.post('/login', trimmer, sanitizer, AuthController.login);
 router.get('/logout', authentication, AuthController.logout);
 router.get('/data', authentication, AuthController.getTokenData);
+router.get('/is-authenticated', authentication, (req, res)=> { res.send('IS_AUTHENTICATED').status(200)})
 
 module.exports = router;
