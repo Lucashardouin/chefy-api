@@ -5,23 +5,23 @@ require('dotenv').config();
 
 const login = async (req, res, next) => {
   const user = {
-    username: req.body.username,
+    email: req.body.email,
     mdp: req.body.mdp,
   };
   try {
-    const userFromDB = await User.findByUsername(user.username);
+    const userFromDB = await User.findByEmail(user.email);
     if (!userFromDB) {
-      throw new Error("Username not found");
+      throw new Error("L'email et/ou le mot de passe est invalide");
     } else {
       const passwordCheck = await bcrypt.compare(user.mdp, userFromDB.mdp);
       if (!passwordCheck) {
-        throw new Error("Invalid credentials");
+        throw new Error("L'email et/ou le mot de passe est invalide");
       } else {
         user.role = userFromDB.role
-        user.id_user = userFromDB.id_user
+        const id_user = user.id_user = userFromDB.id_user
         const token = createJwtToken(user)
         console.log('login succesful');
-        return res.status(200).send({ token });
+        return res.status(200).send({ token, id_user });
       }
     }
   } catch (error) {

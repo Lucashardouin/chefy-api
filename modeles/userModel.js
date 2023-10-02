@@ -19,11 +19,11 @@ class User {
     }
   }
 
-  static async findById(id) {
+  static async findById(id_user) {
     try {
       const sql = await pool.getConnection();
       const result = await sql.query(`SELECT * FROM users WHERE id_user = ?`, [
-        id,
+        id_user,
       ]);
       sql.release();
       return result.length > 0 ? result[0] : null;

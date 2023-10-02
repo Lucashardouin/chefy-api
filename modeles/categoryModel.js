@@ -36,6 +36,19 @@ class Category {
       throw error;
     }
   }
+
+  static async remove(id) {
+    try {
+      const sql = await pool.getConnection();
+      const query = "DELETE FROM category WHERE id_category = ?";
+      const result = await sql.query(query, [id]);
+      sql.release();
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = Category;

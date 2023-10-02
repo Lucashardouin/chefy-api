@@ -14,6 +14,10 @@ const CategoryController = require('../controllers/CategoryController');
 router.post('/', authentication, trimmer, validateUser, sanitizer, CategoryController.createCategory);
 
 // READ
-router.get('/', authentication, validateUser, CategoryController.getCategories);
+router.get('/:id_user', CategoryController.getCategories);
+router.get('/', authentication, CategoryController.getCategoriesConnected);
+
+// DELETE
+router.delete('/:id_category', authentication, CategoryController.deleteCategory);
 
 module.exports = router;
